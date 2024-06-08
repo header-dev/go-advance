@@ -2,22 +2,28 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
-	// start := time.Now()
-	// go doSomething()
-	// go doSomething()
-	// go doSomething()
-	// time.Sleep(120 * time.Millisecond)
-	// fmt.Println(time.Since(start))
-	example()
+
+	wg := &sync.WaitGroup{}
+	wg.Add(3)
+
+	start := time.Now()
+	go doSomething(wg)
+	go doSomething(wg)
+	go doSomething(wg)
+
+	wg.Wait()
+	fmt.Println(time.Since(start))
 }
 
-func doSomething() {
+func doSomething(wg *sync.WaitGroup) {
 	time.Sleep(100 * time.Millisecond)
 	fmt.Println("something")
+	wg.Done()
 }
 
 func example() {
